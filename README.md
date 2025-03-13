@@ -2,7 +2,7 @@
 
 Este ejemplo se creó con recursos de https://github.com/facebook/create-react-app
 
-## Available Scripts
+## Scripts Necesarios
 
 Para ejecutarse debe ubicarse en la carpeta respectiva y ejecutar el comando:
 
