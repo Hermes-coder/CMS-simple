@@ -9,12 +9,10 @@ import './App.css';
 
 function App() {
   const [pages, setPages] = useState(() => {
-    // Intentar cargar las páginas desde localStorage
     const savedPages = localStorage.getItem('cms-pages');
     return savedPages ? JSON.parse(savedPages) : initialPages;
   });
 
-  // Guardar las páginas en localStorage cuando cambien
   useEffect(() => {
     localStorage.setItem('cms-pages', JSON.stringify(pages));
   }, [pages]);
@@ -24,10 +22,15 @@ function App() {
     setPages([...pages, newPage]);
   };
 
+  // Función para eliminar una página
+  const handleDeletePage = (id) => {
+    setPages(pages.filter((page) => page.id !== id));
+  };
+
   return (
     <Router>
       <div className="app">
-        <Layout pages={pages}>
+        <Layout pages={pages} onDeletePage={handleDeletePage}>
           <Routes>
             <Route path="/" element={<HomePage pages={pages} />} />
             <Route path="/create" element={<CreatePage onAddPage={handleAddPage} />} />

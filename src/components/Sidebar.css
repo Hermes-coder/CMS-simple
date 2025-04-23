@@ -1,15 +1,66 @@
+/* Estilos para el Sidebar */
 .sidebar {
-  width: 250px;
+  width: 300px; /* Aumentado */
   height: 100vh;
   background-color: #f5f5f5;
   padding: 20px;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada */
   position: fixed;
   left: 0;
   top: 0;
   overflow-y: auto;
+  transition: transform 0.3s ease;
+  z-index: 100;
 }
 
+.sidebar.hidden {
+  transform: translateX(-100%);
+}
+
+/* Overlay que aparece cuando el sidebar está visible */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4); /* Oscurece el fondo */
+  z-index: 90;
+  transition: opacity 0.3s ease;
+}
+
+/* Botón para mostrar Sidebar */
+.toggle-sidebar-button {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  border-radius: 5px;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Ocultar botón cuando el Sidebar es visible */
+.sidebar-visible .toggle-sidebar-button {
+  display: none;
+}
+
+.toggle-sidebar-button i {
+  transition: transform 0.3s ease;
+}
+
+.toggle-sidebar-button:hover {
+  background-color: #0056b3;
+}
+
+/* Estilos para el contenido dentro del Sidebar */
 .sidebar h2 {
   margin-bottom: 20px;
   color: #333;
@@ -58,4 +109,58 @@
 
 .create-button:hover {
   background-color: #2980b9;
-} 
+}
+
+.delete-button {
+  background-color: transparent;
+  border: none;
+  color: #c0392b;
+  margin-left: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.delete-button:hover {
+  color: #e74c3c;
+  transform: scale(1.2);
+}
+
+/* Estilos para las opciones de contenido en el sidebar */
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  background-color: #fff;
+  padding: 10px 14px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.sidebar li:hover {
+  transform: translateY(-2px);
+}
+
+/* Cuando el sidebar está oculto, el contenido principal ocupa más espacio */
+.layout .sidebar.hidden + .main-content {
+  margin-left: 0;
+}
+
+/* Estilos para los enlaces dentro de la lista del Sidebar */
+.sidebar li a {
+  color: #1a1a1a;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.sidebar li a:hover {
+  color: #0077cc;
+}
