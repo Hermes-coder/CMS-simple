@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import './PageContent.css'; // Asegúrate de que este archivo esté en el mismo directorio
+import './PageContent.css';
 
 const PageContent = ({ pages }) => {
   const { id } = useParams();
@@ -10,14 +10,15 @@ const PageContent = ({ pages }) => {
   const [thumbnails, setThumbnails] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  const imageRef = useRef(null);
+
   useEffect(() => {
-    // Al cambiar de página, actualizamos las imágenes
     if (page) {
       setMainImage(page.imageUrl);
-      setThumbnails(page.thumbnails || []); // Asegurarse que siempre tenga un array
-      setCurrentImageIndex(0); // Restablecemos el índice de la imagen a 0
+      setThumbnails(page.thumbnails || []);
+      setCurrentImageIndex(0);
     }
-  }, [page]); // Ejecutamos este efecto solo cuando `page` cambie
+  }, [page]);
 
   if (!page) {
     return (
@@ -29,7 +30,7 @@ const PageContent = ({ pages }) => {
     );
   }
 
-  const allImages = [page.imageUrl, ...thumbnails, page.additionalThumbnail].filter(Boolean); // Aseguramos que no haya valores nulos
+  const allImages = [page.imageUrl, ...thumbnails, page.additionalThumbnail].filter(Boolean);
 
   const changeMainImage = (imageUrl, index) => {
     setMainImage(imageUrl);
@@ -48,16 +49,56 @@ const PageContent = ({ pages }) => {
     setCurrentImageIndex(prevIndex);
   };
 
+  const handleMouseMove = (e) => {
+    const img = imageRef.current;
+    const controls = document.querySelector('.image-controls');
+
+    if (img && controls) {
+      const controlsRect = controls.getBoundingClientRect();
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+
+      if (
+        mouseX > controlsRect.left &&
+        mouseX < controlsRect.right &&
+        mouseY > controlsRect.top &&
+        mouseY < controlsRect.bottom
+      ) {
+        img.style.transform = 'scale(1)';
+        img.style.transformOrigin = 'center center';
+        return; // No aplicar zoom sobre los botones
+      }
+
+      const { left, top, width, height } = img.getBoundingClientRect();
+      const x = ((e.clientX - left) / width) * 100;
+      const y = ((e.clientY - top) / height) * 100;
+      img.style.transformOrigin = `${x}% ${y}%`;
+      img.style.transform = 'scale(2.2)';
+    }
+  };
+
+  const handleMouseLeave = () => {
+    const img = imageRef.current;
+    if (img) {
+      img.style.transform = 'scale(1)';
+      img.style.transformOrigin = 'center center';
+    }
+  };
+
   return (
     <main>
       <section className="page-content">
-        {/* Left side: Image and badge */}
-        <section className="image-section">
+        <section
+          className="image-section"
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+        >
           <div className="badge">
-            <i className="fas fa-star text-black"></i>
-            <span>Altamente valorado</span>
+            <i className="fas fa-motorcycle"></i>
+            <span>Top Performance</span>
           </div>
           <img
+            ref={imageRef}
             alt={page.title}
             className="main-image"
             src={mainImage}
@@ -66,21 +107,36 @@ const PageContent = ({ pages }) => {
             <button aria-label="Previous image" className="control-button" onClick={goToPreviousImage}>
               <i className="fas fa-chevron-left"></i>
             </button>
-            
             <button aria-label="Next image" className="control-button" onClick={goToNextImage}>
               <i className="fas fa-chevron-right"></i>
             </button>
           </div>
         </section>
 
-        {/* Right side: Product details */}
         <section className="details-section">
           <h1 className="product-title">{page.title}</h1>
-          <p className="product-price">${page.price}</p>
+          <p className="product-price">${page.price.toLocaleString()}</p>
           <p className="product-description">{page.content}</p>
-          
-          
-          {/* Thumbnails */}
+
+          {page.characteristics && (
+            <ul className="characteristics-list">
+              {page.characteristics.map((item, idx) => (
+                <li key={idx}>{item}</li>
+              ))}
+            </ul>
+          )}
+          {/* Características Destacadas */}
+        {page.features && page.features.length > 0 && (
+          <div className="features-list">
+            <h3>Características Principales:</h3>
+            <ul>
+              {page.features.map((feature, index) => (
+                <li key={index}>{feature}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
           <div className="thumbnails">
             {allImages.map((thumbnail, index) => (
               <button
@@ -98,13 +154,12 @@ const PageContent = ({ pages }) => {
           </div>
         </section>
       </section>
+
       <Link to="/" className="back-link">Volver al inicio</Link>
       <footer className="footer">
-        <p>Desarrollado por Magdiel Dominguez Arias</p>
+        <p>Desarrollado por Magdiel Domínguez Arias</p>
       </footer>
-
     </main>
-    
   );
 };
 

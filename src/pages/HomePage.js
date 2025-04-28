@@ -16,15 +16,15 @@ const HomePage = ({ pages }) => {
   return (
     <div className="home-page">
       <div className="welcome-section">
-        <h1>Bienvenido a Magdiel CMS</h1>
-        <p>Un sistema de gestión de de prodcutos de todo tipo.</p>
+        <h1>Bienvenido a Magdiel Sportbikes </h1>
+        <p>"Potencia, velocidad y estilo, todo en un solo lugar".</p>
         <Link to="/create" className="create-page-button">
-          Agrega tus productos
+          Agrega motocicletas
         </Link>
       </div>
 
       <div className="recent-pages">
-        <h2>Productos recien creados</h2>
+        <h2>Motocicletas recien agregadas</h2>
         {sortedPages.length > 0 ? (
           <div className="pages-grid">
             {sortedPages.map(page => (
@@ -53,7 +53,7 @@ const HomePage = ({ pages }) => {
             ))}
           </div>
         ) : (
-          <p className="no-pages">No hay productos promocionados aún. ¡Promociona tus productos!</p>
+          <p className="no-pages">No hay motocicletas en stock. ¡Agrega la primera!</p>
         )}
       </div>
       <div className="developer-credit">

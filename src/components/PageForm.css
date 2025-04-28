@@ -42,8 +42,8 @@
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #3498db;
-  box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+  border-color: #1a1a1a;
+  box-shadow: 0 0 5px #1a1a1a;
 }
 
 .form-actions {
@@ -69,7 +69,7 @@
 }
 
 .submit-button {
-  background-color: #3498db;
+  background-color: #1a1a1a;
   color: white;
 }
 
@@ -78,5 +78,23 @@
 }
 
 .submit-button:hover {
-  background-color: #2980b9;
+  background-color: #333;
 } 
+/* Estilo para el contenedor del select */
+.form-group select {
+  background-color: #fff; /* Fondo oscuro */
+  color: #1a1a1a; /* Texto blanco */
+  border: 1px solid #ddd; /* Borde suave */
+}
+
+/* Estilo para el elemento de opción */
+.form-group select option {
+  background-color: #fff; /* Fondo oscuro para las opciones */
+  color: #1a1a1a; /* Texto blanco */
+}
+
+/* Para cuando el select esté en foco */
+.form-group select:focus {
+  border-color: #1a1a1a; /* Color del borde cuando se selecciona */
+  box-shadow: 0 0 5px #fff;
+}
