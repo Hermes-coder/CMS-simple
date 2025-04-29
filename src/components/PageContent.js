@@ -2,24 +2,32 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import './PageContent.css';
 
+/* Componente PageContent que muestra los detalles de una página específica */
 const PageContent = ({ pages }) => {
+  /* Extrae el parámetro de la URL */
   const { id } = useParams();
+
+  /* Busca la página correspondiente en el array `pages` */
   const page = pages.find(p => p.id === id);
 
+  /* Estados para manejar la imagen principal, miniaturas y el índice de la imagen actual */
   const [mainImage, setMainImage] = useState('');
   const [thumbnails, setThumbnails] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  /* Referencia al elemento de imagen principal */
   const imageRef = useRef(null);
 
+  /* Efecto que se ejecuta al montar el componente o cuando cambia `page` */
   useEffect(() => {
     if (page) {
-      setMainImage(page.imageUrl);
-      setThumbnails(page.thumbnails || []);
-      setCurrentImageIndex(0);
+      setMainImage(page.imageUrl); // Imagen principal
+      setThumbnails(page.thumbnails || []); // Miniaturas (si existen)
+      setCurrentImageIndex(0); // Reinicia el índice
     }
   }, [page]);
 
+  /* Si la página no existe, muestra un mensaje de error */
   if (!page) {
     return (
       <div className="page-not-found">
@@ -30,25 +38,30 @@ const PageContent = ({ pages }) => {
     );
   }
 
+  /* Crea un array con todas las imágenes (principal, miniaturas y adicional) */
   const allImages = [page.imageUrl, ...thumbnails, page.additionalThumbnail].filter(Boolean);
 
+  /* Cambia la imagen principal y actualiza el índice */
   const changeMainImage = (imageUrl, index) => {
     setMainImage(imageUrl);
     setCurrentImageIndex(index);
   };
 
+  /* Avanza a la siguiente imagen */
   const goToNextImage = () => {
     const nextIndex = (currentImageIndex + 1) % allImages.length;
     setMainImage(allImages[nextIndex]);
     setCurrentImageIndex(nextIndex);
   };
 
+  /* Retrocede a la imagen anterior */
   const goToPreviousImage = () => {
     const prevIndex = (currentImageIndex - 1 + allImages.length) % allImages.length;
     setMainImage(allImages[prevIndex]);
     setCurrentImageIndex(prevIndex);
   };
 
+  /* Maneja el zoom dinámico cuando se mueve el mouse sobre la imagen */
   const handleMouseMove = (e) => {
     const img = imageRef.current;
     const controls = document.querySelector('.image-controls');
@@ -58,6 +71,7 @@ const PageContent = ({ pages }) => {
       const mouseX = e.clientX;
       const mouseY = e.clientY;
 
+      /* Si el mouse está sobre los botones de navegación, desactiva el zoom */
       if (
         mouseX > controlsRect.left &&
         mouseX < controlsRect.right &&
@@ -66,9 +80,10 @@ const PageContent = ({ pages }) => {
       ) {
         img.style.transform = 'scale(1)';
         img.style.transformOrigin = 'center center';
-        return; // No aplicar zoom sobre los botones
+        return;
       }
 
+      /* Calcula el origen del zoom basado en la posición del cursor */
       const { left, top, width, height } = img.getBoundingClientRect();
       const x = ((e.clientX - left) / width) * 100;
       const y = ((e.clientY - top) / height) * 100;
@@ -77,6 +92,7 @@ const PageContent = ({ pages }) => {
     }
   };
 
+  /* Restaura el zoom cuando el mouse sale de la imagen */
   const handleMouseLeave = () => {
     const img = imageRef.current;
     if (img) {
@@ -85,9 +101,11 @@ const PageContent = ({ pages }) => {
     }
   };
 
+  /* Renderizado del componente */
   return (
     <main>
       <section className="page-content">
+        {/* Sección de imagen con zoom y controles */}
         <section
           className="image-section"
           onMouseMove={handleMouseMove}
@@ -113,11 +131,13 @@ const PageContent = ({ pages }) => {
           </div>
         </section>
 
+        {/* Sección de detalles del producto */}
         <section className="details-section">
           <h1 className="product-title">{page.title}</h1>
           <p className="product-price">${page.price.toLocaleString()}</p>
           <p className="product-description">{page.content}</p>
 
+          {/* Lista de características si existen */}
           {page.characteristics && (
             <ul className="characteristics-list">
               {page.characteristics.map((item, idx) => (
@@ -125,18 +145,20 @@ const PageContent = ({ pages }) => {
               ))}
             </ul>
           )}
-          {/* Características Destacadas */}
-        {page.features && page.features.length > 0 && (
-          <div className="features-list">
-            <h3>Características Principales:</h3>
-            <ul>
-              {page.features.map((feature, index) => (
-                <li key={index}>{feature}</li>
-              ))}
-            </ul>
-          </div>
-        )}
 
+          {/* Características principales si existen */}
+          {page.features && page.features.length > 0 && (
+            <div className="features-list">
+              <h3>Características Principales:</h3>
+              <ul>
+                {page.features.map((feature, index) => (
+                  <li key={index}>{feature}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Miniaturas para cambiar de imagen */}
           <div className="thumbnails">
             {allImages.map((thumbnail, index) => (
               <button
@@ -155,7 +177,10 @@ const PageContent = ({ pages }) => {
         </section>
       </section>
 
+      {/* Enlace de regreso al inicio */}
       <Link to="/" className="back-link">Volver al inicio</Link>
+
+      {/* Pie de página */}
       <footer className="footer">
         <p>Desarrollado por Magdiel Domínguez Arias</p>
       </footer>

@@ -1,21 +1,22 @@
+/* Contenedor principal del layout: usa Flexbox para colocar el sidebar y el contenido principal lado a lado */
 .layout {
   display: flex;
-  min-height: 100vh;
+  min-height: 100vh; /* Asegura que el layout ocupe al menos toda la altura de la ventana */
 }
 
+/* Contenido principal (a la derecha del sidebar) */
 .main-content {
-  flex: 1;
-  padding: 20px;
-  margin-left: 250px; /* Ancho del sidebar */
-  background-color: #f9f9f9;
-  min-height: 100vh;
+  flex: 1; /* Ocupa todo el espacio disponible restante */
+  padding: 20px; /* Espaciado interno */
+  margin-left: 250px; /* Deja espacio para el sidebar, que se asume mide 250px */
+  background-color: #f9f9f9; /* Fondo claro */
+  min-height: 100vh; /* Asegura que tenga al menos el alto de la ventana */
 }
 
-
-
+/* Estilos responsivos para pantallas pequeñas */
 @media (max-width: 768px) {
   .main-content {
-    margin-left: 0;
-    padding-top: 60px;
+    margin-left: 0; /* Elimina el margen para que ocupe todo el ancho */
+    padding-top: 60px; /* Espaciado superior para dejar lugar a una barra superior fija (si la hubiera) */
   }
-} 
+}
